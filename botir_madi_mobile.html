@@ -1,0 +1,347 @@
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;}
+body{background:#0a0a0f;overflow:hidden;touch-action:none;}
+#gc{display:block;width:100%;height:100%;}
+#ui{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;font-family:'Courier New',monospace;}
+#hpw{position:absolute;top:10px;left:10px;}
+#hpn{color:#fff;font-size:11px;margin-bottom:2px;}
+#hpo{width:130px;height:10px;background:#111;border:1px solid #333;border-radius:5px;overflow:hidden;}
+#hpf{height:100%;width:100%;background:#e44;border-radius:5px;transition:width .2s;}
+#stg{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);border:1px solid #444;border-radius:5px;padding:3px 10px;color:#ffd700;font-size:11px;font-weight:bold;white-space:nowrap;}
+#ew{position:absolute;top:10px;right:10px;text-align:right;}
+#en{color:#f86;font-size:11px;margin-bottom:2px;}
+#eo{width:110px;height:10px;background:#111;border:1px solid #333;border-radius:5px;overflow:hidden;margin-left:auto;}
+#ef{height:100%;width:100%;background:linear-gradient(90deg,#a3f,#f4a);border-radius:5px;transition:width .2s;}
+#bw{margin-top:5px;display:none;}
+#bn{color:#f33;font-size:11px;margin-bottom:2px;}
+#bo{width:110px;height:10px;background:#111;border:1px solid #333;border-radius:5px;overflow:hidden;margin-left:auto;}
+#bf{height:100%;width:100%;background:linear-gradient(90deg,#c11,#f60);border-radius:5px;transition:width .2s;}
+#cmb{position:absolute;top:45px;left:10px;color:#f80;font-size:14px;font-weight:bold;opacity:0;transition:opacity .3s;}
+#ovr{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;pointer-events:none;}
+#mb{color:#fff;font-size:20px;font-weight:bold;text-align:center;white-space:pre-line;line-height:1.5;text-shadow:0 0 15px #f33;}
+#ms{color:#bbb;font-size:12px;margin-top:10px;text-align:center;white-space:pre-line;line-height:1.7;}
+#rbtn{pointer-events:all;margin-top:16px;background:#c22;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:bold;cursor:pointer;display:none;}
+#ctrls{position:absolute;bottom:0;left:0;width:100%;height:160px;pointer-events:all;display:flex;align-items:flex-end;justify-content:space-between;padding:0 16px 16px;}
+#leftpad{display:flex;gap:6px;align-items:flex-end;}
+#rightpad{display:flex;flex-direction:column;gap:6px;align-items:flex-end;}
+#topbtns{display:flex;gap:6px;margin-bottom:6px;}
+.btn{width:58px;height:58px;border-radius:50%;border:2px solid rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;background:rgba(0,0,0,0.55);cursor:pointer;-webkit-tap-highlight-color:transparent;font-weight:bold;}
+.btn:active{background:rgba(255,255,255,0.18);}
+.wbtn{width:54px;height:54px;border-radius:50%;border:2px solid rgba(100,200,255,0.35);display:flex;align-items:center;justify-content:center;font-size:18px;color:#8df;background:rgba(0,30,60,0.6);cursor:pointer;}
+.wbtn:active{background:rgba(100,200,255,0.25);}
+.abtn{width:62px;height:62px;border-radius:50%;border:2px solid rgba(255,100,50,0.45);background:rgba(60,10,0,0.6);font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#f84;}
+.abtn:active{background:rgba(255,100,50,0.3);}
+.kbtn{width:56px;height:56px;border-radius:50%;border:2px solid rgba(200,50,255,0.4);background:rgba(40,0,60,0.6);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#d4f;}
+.kbtn:active{background:rgba(200,50,255,0.25);}
+#startbtn{pointer-events:all;margin-top:18px;background:#1a5fbf;color:#fff;border:none;border-radius:10px;padding:12px 30px;font-size:15px;font-weight:bold;cursor:pointer;}
+</style>
+
+<canvas id="gc"></canvas>
+<div id="ui">
+  <div id="hpw"><div id="hpn">BOTIR</div><div id="hpo"><div id="hpf"></div></div></div>
+  <div id="stg">1/4 BOSQICH</div>
+  <div id="ew"><div id="en">DUSHMAN</div><div id="eo"><div id="ef"></div></div><div id="bw"><div id="bn">BOSS</div><div id="bo"><div id="bf"></div></div></div></div>
+  <div id="cmb">COMBO!</div>
+  <div id="ovr"><div id="mb"></div><div id="ms"></div><button id="rbtn" onclick="restart()">QAYTA BOSHLASH</button><button id="startbtn" onclick="startPlay()" style="display:none">BOSHLASH</button></div>
+  <div id="ctrls">
+    <div id="leftpad">
+      <div class="btn" id="btnL" style="font-size:24px;">&#8592;</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div class="wbtn" id="btnUp">&#8593;</div>
+        <div class="btn" id="btnD" style="font-size:18px;">&#8595;</div>
+      </div>
+      <div class="btn" id="btnR" style="font-size:24px;">&#8594;</div>
+    </div>
+    <div id="rightpad">
+      <div id="topbtns">
+        <div class="wbtn" id="btnJ">&#x2191;&#x2191;</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <div class="kbtn" id="btnK">&#128062;</div>
+        <div class="abtn" id="btnP">&#9994;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const cv=document.getElementById('gc');
+const cx=cv.getContext('2d');
+function resize(){cv.width=window.innerWidth||380;cv.height=window.innerHeight||600;}
+resize();
+window.addEventListener('resize',resize);
+const W=()=>cv.width, H=()=>cv.height, GY=()=>H()-168;
+
+const vkeys={left:false,right:false,up:false,down:false,punch:false,kick:false,jump:false};
+
+function btn(id,key){
+  const el=document.getElementById(id);
+  el.addEventListener('touchstart',e=>{e.preventDefault();vkeys[key]=true;},{passive:false});
+  el.addEventListener('touchend',e=>{e.preventDefault();vkeys[key]=false;},{passive:false});
+  el.addEventListener('mousedown',()=>vkeys[key]=true);
+  el.addEventListener('mouseup',()=>vkeys[key]=false);
+}
+btn('btnL','left'); btn('btnR','right'); btn('btnD','down');
+btn('btnP','punch'); btn('btnK','kick'); btn('btnJ','jump'); btn('btnUp','jump');
+
+const STORY=[
+  {bg:'#0d0820',acc:'#1a1240',nm:'TOSHKENT BOZORI',desc:'Botir bazordan qaytayotgan edi...\nTo\'satdan qo\'ng\'iroq keldi:\n"Madini olib ketishdi!"',en:2,boss:false},
+  {bg:'#0a1520',acc:'#102030',nm:'PORT OMBORI',desc:'Izlar omborga olib bordi.\nMafiya shu yerda Madini\nyashirayapti.',en:3,boss:false},
+  {bg:'#1a0a0a',acc:'#2a1010',nm:'MAFIYA QARORGOHI',desc:'Botir binoga kirdi.\nTo\'la qorovullar.\nLekin u to\'xtamaydi.',en:4,boss:false},
+  {bg:'#050505',acc:'#100808',nm:'BOSH XONA',desc:'Oxirgi xona.\nKarim — mafiya bossi.\nBotir hammasini qo\'ydi.',en:2,boss:true,bossNm:'KARIM'},
+];
+
+let gs='intro',si=0,parts=[],shk=0,pcd=0,kcd=0,cn=0,ct=0;
+let ens=[],bossE=null;
+
+const P={x:0,y:0,vy:0,hp:100,mhp:100,w:20,h:50,gr:true,cr:false,f:1,pu:0,ki:0,hu:0,dead:false};
+
+function initP(){
+  P.x=90;P.y=GY();P.vy=0;P.hp=100;P.gr=true;P.cr=false;P.f=1;
+  P.pu=0;P.ki=0;P.hu=0;P.dead=false;
+}
+
+function mkE(x,hp,ib){
+  return{x,y:GY(),vy:0,hp,mhp:hp,w:ib?30:22,h:ib?56:48,gr:true,f:-1,pu:0,hu:0,dead:false,
+    ai:55+Math.random()*55,ib:ib||false};
+}
+
+function spawnS(i){
+  const s=STORY[i];
+  ens=[];bossE=null;
+  for(let j=0;j<s.en;j++) ens.push(mkE(W()-140-j*85,45+i*13));
+  if(s.boss){bossE=mkE(W()-100,220,true);document.getElementById('bw').style.display='block';}
+  else document.getElementById('bw').style.display='none';
+  document.getElementById('stg').textContent=`${i+1}/4 — ${s.nm}`;
+}
+
+function spPart(x,y,col,n){
+  for(let i=0;i<n;i++)
+    parts.push({x,y,vx:(Math.random()-.5)*6,vy:-Math.random()*5-1,
+      life:35+Math.random()*20,max:55,col,r:2+Math.random()*3});
+}
+
+function setMsg(big,small,rb,sb){
+  document.getElementById('mb').textContent=big;
+  document.getElementById('ms').textContent=small;
+  document.getElementById('rbtn').style.display=rb?'block':'none';
+  document.getElementById('startbtn').style.display=sb?'block':'none';
+}
+
+function showStory(i,cb){
+  gs='story';
+  setMsg(STORY[i].nm,STORY[i].desc);
+  setTimeout(()=>{setMsg('','');cb();},2800);
+}
+
+function startPlay(){
+  setMsg('','');
+  spawnS(0);
+  showStory(0,()=>{gs='playing';});
+}
+
+function restart(){
+  initP();
+  parts=[];shk=0;pcd=0;kcd=0;cn=0;ct=0;
+  si=0;
+  spawnS(0);
+  setMsg('','');
+  showStory(0,()=>{gs='playing';});
+}
+
+function doHit(type){
+  const dmg=type==='kick'?17:11,rng=type==='kick'?66:55;
+  const all=bossE?[...ens,bossE]:ens;
+  for(const e of all){
+    if(e.dead)continue;
+    const d=Math.abs(P.x-e.x),dir=P.f*(e.x-P.x);
+    if(d<rng&&dir>0){
+      e.hp-=dmg;e.hu=13;shk=4;
+      spPart(e.x,e.y-30,type==='kick'?'#ff8844':'#ffaa44',7);
+      cn++;ct=60;
+      document.getElementById('cmb').style.opacity='1';
+      document.getElementById('cmb').textContent=cn>1?`${cn}x ZARBA!`:'HIT!';
+      if(e.hp<=0){e.dead=true;e.hp=0;spPart(e.x,e.y-25,'#ff4444',12);}
+    }
+  }
+}
+
+function updP(){
+  if(P.dead)return;
+  if(vkeys.left){P.x-=3.2;P.f=-1;}
+  if(vkeys.right){P.x+=3.2;P.f=1;}
+  P.x=Math.max(18,Math.min(W()-18,P.x));
+  P.cr=vkeys.down;
+  if(vkeys.jump&&P.gr){P.vy=-12;P.gr=false;}
+  P.vy+=0.65;P.y+=P.vy;
+  if(P.y>=GY()){P.y=GY();P.vy=0;P.gr=true;}
+  if(vkeys.punch&&pcd<=0){P.pu=11;pcd=20;doHit('punch');}
+  if(vkeys.kick&&kcd<=0){P.ki=11;kcd=26;doHit('kick');}
+  if(pcd>0)pcd--;if(kcd>0)kcd--;
+  if(P.pu>0)P.pu--;if(P.ki>0)P.ki--;if(P.hu>0)P.hu--;
+}
+
+function updEns(){
+  const all=bossE?[...ens,bossE]:ens;
+  for(const e of all){
+    if(e.dead)continue;
+    e.vy=(e.vy||0)+0.65;e.y+=e.vy;
+    if(e.y>=GY()){e.y=GY();e.vy=0;e.gr=true;}
+    const d=Math.abs(e.x-P.x),dir=P.x>e.x?1:-1;
+    e.f=dir;
+    if(d>52)e.x+=dir*(e.ib?1.8:1.4);
+    else{
+      e.ai--;
+      if(e.ai<=0){
+        e.ai=e.ib?30:45+Math.random()*35;
+        const dmg=e.ib?15:9;
+        P.hp-=dmg;P.hu=15;shk=6;e.pu=11;
+        spPart(P.x,P.y-30,'#4488ff',5);
+        if(P.hp<=0){P.hp=0;P.dead=true;gs='dead';
+          setMsg('YIQILDINGIZ','Botir kuchini yo\'qotdi...\nLekin Madi hali kutayapti.',true,false);}
+      }
+    }
+    if(e.pu>0)e.pu--;if(e.hu>0)e.hu--;
+  }
+}
+
+function updBars(){
+  document.getElementById('hpf').style.width=Math.max(0,P.hp/P.mhp*100)+'%';
+  const al=ens.filter(e=>!e.dead);
+  if(al.length){
+    const avg=al.reduce((s,e)=>s+e.hp,0)/al.length;
+    const mx=al.reduce((s,e)=>s+e.mhp,0)/al.length;
+    document.getElementById('ef').style.width=(avg/mx*100)+'%';
+    document.getElementById('en').textContent=`DUSHMAN: ${al.length}`;
+  }else{document.getElementById('ef').style.width='0%';}
+  if(bossE) document.getElementById('bf').style.width=Math.max(0,bossE.hp/bossE.mhp*100)+'%';
+}
+
+function chkClear(){
+  if(gs!=='playing')return;
+  if(ens.filter(e=>!e.dead).length===0&&(!bossE||bossE.dead)){
+    gs='clear';
+    if(si<3){
+      setMsg('TOZALANDI!','Keyingisiga o\'tilmoqda...');
+      P.hp=Math.min(P.mhp,P.hp+20);
+      setTimeout(()=>{si++;spawnS(si);showStory(si,()=>{gs='playing';});},2000);
+    } else {gs='ending';showEnd();}
+  }
+}
+
+function showEnd(){
+  const lines=[
+    ['BOTIR ZINDONNI BOSDI...','Qon va ter bilan u Karimni yiqitdi.'],
+    ['U ESHIKNI OCHDI...','Yurak urishi tezlashdi...'],
+    ['MADI...','...'],
+    ['MADI ALLAQACHON O\'LIB KETGAN EDI.','Ular uni bir kun avval zaxarlashgan edi.'],
+    ['Botir tiz cho\'kdi.','Barcha sinovlar — behuda bo\'ldi.\nU qizini bir marta ko\'rmoqchi edi, xolos.'],
+    ['"KECHIRGIL, MADIM..."','...u yig\'ladi.'],
+  ];
+  let i=0;
+  function nx(){
+    if(i>=lines.length){setMsg('OXIRI','Qayta boshlash uchun tugmani bosing.',true,false);return;}
+    setMsg(lines[i][0],lines[i][1]);i++;
+    setTimeout(nx,3200);
+  }
+  setTimeout(nx,800);
+}
+
+function drawBg(){
+  const s=STORY[si];
+  cx.fillStyle=s.bg;cx.fillRect(0,0,W(),H());
+  cx.fillStyle=s.acc;cx.fillRect(0,H()*0.4,W(),H()*0.6);
+  cx.fillStyle='rgba(255,255,255,0.025)';
+  for(let i=0;i<10;i++){const bh=30+Math.sin(i*1.9)*50;cx.fillRect(i*50-5,GY()-bh,28,bh);}
+  cx.fillStyle='#111';cx.fillRect(0,GY()+3,W(),H());
+  cx.fillStyle='#1e1e1e';cx.fillRect(0,GY(),W(),4);
+  if(si===3){cx.fillStyle='rgba(180,0,0,0.06)';cx.fillRect(0,0,W(),H());}
+}
+
+function drawHuman(e,isP){
+  const gy=GY();
+  if(e.dead){
+    cx.fillStyle='#444';cx.fillRect(e.x-22,e.y-10,44,10);
+    cx.beginPath();cx.arc(e.x-20,e.y-5,7,0,Math.PI*2);cx.fill();
+    return;
+  }
+  const fl=e.hu>0;
+  const skin=fl?'#fff':(isP?'#e8b88a':(e.ib?'#d4956a':'#c9a07a'));
+  const shirt=fl?'#fff':(isP?'#1a5fbf':(e.ib?'#8b0000':'#4a4a4a'));
+  const pants=fl?'#fff':(isP?'#2a2a5a':(e.ib?'#1a1a1a':'#333'));
+  const shoe=fl?'#fff':'#111';
+  const f=e.f;
+  const cr=e.cr;
+  const by=e.y;
+  const lh=cr?8:20,bh=cr?16:24;
+  const bt=by-lh-bh,ht=bt-20;
+  cx.fillStyle=shoe;cx.fillRect(e.x-10,by-5,11,6);cx.fillRect(e.x+1,by-5,11,6);
+  cx.fillStyle=pants;
+  if(!cr){cx.fillRect(e.x-9,by-lh,9,lh);cx.fillRect(e.x+1,by-lh,9,lh);}
+  else{cx.fillRect(e.x-12,by-lh,12,lh);cx.fillRect(e.x+1,by-lh,12,lh);}
+  cx.fillStyle=shirt;cx.fillRect(e.x-(cr?13:11),bt,cr?26:22,bh);
+  cx.fillStyle=skin;
+  cx.beginPath();cx.moveTo(e.x,bt+2);cx.lineTo(e.x+f*5,bt+9);cx.lineTo(e.x-f*5,bt+9);cx.closePath();cx.fill();
+  if(e.pu>0){
+    cx.fillStyle=skin;const ax=e.x+f*11,aw=f*(14+e.pu*0.8);
+    cx.fillRect(ax,bt+4,aw,8);cx.fillRect(ax+aw-f*5,bt+2,f*9,12);
+  } else if(e.ki>0){
+    const kx=e.x+f*6,kw=f*(12+e.ki);
+    cx.fillStyle=pants;cx.fillRect(kx,by-18,kw,8);
+    cx.fillStyle=shoe;cx.fillRect(kx+kw-f*5,by-20,f*10,9);
+  } else {
+    cx.fillStyle=shirt;cx.fillRect(e.x+f*10,bt+3,7,14);cx.fillRect(e.x-(f>0?17:3),bt+3,7,14);
+    cx.fillStyle=skin;cx.fillRect(e.x+f*10,bt+13,7,7);cx.fillRect(e.x-(f>0?17:3),bt+13,7,7);
+  }
+  cx.fillStyle='#666';cx.fillRect(e.x-3,ht+16,6,5);
+  cx.fillStyle=skin;cx.beginPath();cx.ellipse(e.x,ht+9,9,11,0,0,Math.PI*2);cx.fill();
+  cx.fillStyle=isP?'#2a1a00':(e.ib?'#1a0000':'#111');cx.fillRect(e.x-9,ht,18,7);
+  cx.beginPath();cx.ellipse(e.x,ht+1,9,4.5,0,Math.PI,Math.PI*2);cx.fill();
+  const ey=ht+7;
+  cx.fillStyle='#fff';cx.fillRect(e.x+f*1,ey,5,4);cx.fillRect(e.x+(f>0?-6:-1),ey,5,4);
+  cx.fillStyle=isP?'#2266ff':'#cc0000';
+  cx.fillRect(e.x+f*2,ey+1,3,3);cx.fillRect(e.x+(f>0?-5:0),ey+1,3,3);
+  cx.fillStyle='#8b3a3a';
+  if(e.hu>0){cx.beginPath();cx.arc(e.x,ht+14,3,0,Math.PI);cx.fill();}
+  else cx.fillRect(e.x-3,ht+14,6,2);
+  if(e.ib){
+    cx.fillStyle='#ffd700';cx.fillRect(e.x-10,ht-4,20,5);
+    cx.fillRect(e.x-8,ht-8,4,4);cx.fillRect(e.x-1,ht-10,4,6);cx.fillRect(e.x+5,ht-8,4,4);
+    cx.fillStyle='#f33';cx.font='bold 10px Courier New';cx.textAlign='center';
+    cx.fillText('KARIM',e.x,ht-12);
+  }
+}
+
+function drawParts(){
+  for(const p of parts){
+    cx.globalAlpha=p.life/p.max;cx.fillStyle=p.col;
+    cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fill();
+  }
+  cx.globalAlpha=1;
+}
+
+function loop(){
+  cx.save();
+  if(shk>0){cx.translate((Math.random()-.5)*shk,(Math.random()-.5)*shk);shk--;}
+  drawBg();drawParts();
+  const all=bossE?[...ens,bossE]:ens;
+  for(const e of all) drawHuman(e,false);
+  drawHuman(P,true);
+  cx.restore();
+  if(gs==='playing'){
+    updP();updEns();updBars();chkClear();
+    parts=parts.filter(p=>p.life>0);
+    for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.vy+=0.2;p.life--;}
+    if(ct>0)ct--;else{cn=0;document.getElementById('cmb').style.opacity='0';}
+  } else {
+    parts=parts.filter(p=>p.life>0);
+    for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.vy+=0.2;p.life--;}
+  }
+  requestAnimationFrame(loop);
+}
+
+initP();
+setMsg('BOTIR VA MADI','Bugun ertalab Madini mafiya o\'g\'irladi.\nBotirning yagona qizi. Yagona nuri.\n\nU ularni topib, qizini qaytarib oladi —\nyo bu yo\'lda o\'ladi.',false,true);
+loop();
+</script>
